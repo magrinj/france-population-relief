@@ -1,0 +1,23 @@
+{
+  "name": "france-population-relief",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "data": "node scripts/fetch-data.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "record": "node scripts/record-video.mjs"
+  },
+  "devDependencies": {
+    "@types/three": "^0.186.0",
+    "typescript": "^5.6.0",
+    "vite": "^7.0.0"
+  },
+  "dependencies": {
+    "@fontsource-variable/dm-sans": "^5.3.0",
+    "three": "^0.186.0"
+  }
+}
