@@ -164,13 +164,15 @@ export function drawOverlay(
 
   // Events first: they own their spot.
   const period = events ? t.periods[events.period] : null;
-  const alive = period ? Math.max(0, Math.min(1, (5500 - (now - events!.since)) / 1200)) : 0;
+  // The frame timestamp can precede the moment the period was noticed.
+  const age = events ? Math.max(0, now - events.since) : 0;
+  const alive = period ? Math.max(0, Math.min(1, (5500 - age) / 1200)) : 0;
   if (period && alive > 0) {
     ctx.textAlign = "left";
     for (const ev of period.places) {
       const c = data.communes[data.byCode.get(ev.code)!];
       relief.project(c.gx, c.gy, p);
-      const pulse = ((now - events!.since) / 900) % 1;
+      const pulse = (age / 900) % 1;
       ctx.globalAlpha = alive * (1 - pulse);
       ctx.strokeStyle = "#f2c14e";
       ctx.lineWidth = 2;

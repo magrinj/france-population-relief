@@ -16,8 +16,8 @@ test("relief follows the census data end to end", { skip: chromePath() ? false :
   const vite = spawn("npx", ["vite", "--port", String(PORT), "--strictPort", "--logLevel", "error"], { stdio: "ignore" });
   const chrome = await launch({ width: 1280, height: 800 });
   t.after(async () => {
+    vite.kill(); // first, so nothing keeps the runner alive if Chrome misbehaves
     await chrome.close();
-    vite.kill();
   });
   for (let i = 0; i < 100; i++) {
     if (await fetch(`http://localhost:${PORT}/`).then((r) => r.ok).catch(() => false)) break;
@@ -102,7 +102,8 @@ test("relief follows the census data end to end", { skip: chromePath() ? false :
 
   await t.test("zooming on a département keeps picking and labels consistent", async () => {
     await ev("__relief.zoomDep('33')");
-    await ev("new Promise(r=>setTimeout(r,700))");
+    // The zoom animates over frames; a slow software renderer needs time.
+    for (let k = 0; k < 40 && (await ev("__relief.zoom()")) < 2; k++) await sleep(200);
     await settle();
     assert.ok((await ev("__relief.zoom()")) > 2);
     const p = await ev("__relief.project('33063')");

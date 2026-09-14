@@ -37,7 +37,7 @@ main.record header .lang { display: none; }
 .sign span { display: block; font-size: 14px; color: #d4dbe4; margin-top: 6px; }
 .sign .growth { font-size: 13px; color: var(--accent); margin-top: 2px; }
 
-.feed { position: absolute; left: var(--pad); top: 182px; width: 310px; max-height: calc(100svh - 340px); overflow: hidden auto; pointer-events: none; mask-image: linear-gradient(to bottom, transparent, #000 28px, #000 calc(100% - 8px), transparent); scrollbar-width: none; }
+.feed { position: absolute; left: var(--pad); top: 152px; width: 310px; max-height: calc(100svh - 335px); padding-top: 30px; overflow: hidden auto; pointer-events: none; mask-image: linear-gradient(to bottom, transparent, #000 28px, #000 calc(100% - 8px), transparent); scrollbar-width: none; }
 .feed section { opacity: 0.4; margin: 0 0 14px; padding-left: 12px; border-left: 2px solid transparent; transition: opacity 0.6s, border-color 0.6s; }
 .feed section.now { opacity: 1; border-left-color: var(--accent); }
 .feed h2 { margin: 0; font-size: 14px; font-weight: 700; }

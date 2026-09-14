@@ -37,6 +37,7 @@ export async function launch({ width = 1280, height = 800, port = 9333, headless
       "--ignore-gpu-blocklist",
       "--disable-gpu-vsync",
       ...extra,
+      ...(process.env.CHROME_FLAGS ? process.env.CHROME_FLAGS.split(" ") : []),
       "about:blank",
     ],
     { stdio: "ignore" },
@@ -100,7 +101,10 @@ export async function launch({ width = 1280, height = 800, port = 9333, headless
       const gone = new Promise((r) => proc.once("exit", r));
       proc.kill();
       await gone;
-      rmSync(profile, { recursive: true, force: true });
+      // Chrome may still be flushing its profile; never let that fail a run.
+      try {
+        rmSync(profile, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 });
+      } catch {}
     },
   };
 }
