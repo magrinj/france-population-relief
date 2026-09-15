@@ -170,7 +170,8 @@ async function start() {
     tipKey = "";
   view();
   setYear(year);
-  if (q.has("zoom")) zoomTo(num("zoom", 1, 1, 12), data.W / 2, data.H / 2, true);
+  // ?zoom= with optional ?cx= and ?cy= (grid offsets from the centre, in km)
+  if (q.has("zoom")) zoomTo(num("zoom", 1, 1, 12), data.W / 2 + num("cx", 0, -600, 600), data.H / 2 + num("cy", 0, -600, 600), true);
   $el("#loading").remove();
   const frameMs: number[] = [];
   const loop = (now: number) => {

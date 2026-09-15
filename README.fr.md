@@ -74,7 +74,7 @@ WebGL2 via three.js. La grille des communes et les valeurs de l’instant vont s
 
 ## Enregistrer une vidéo
 
-`?record` affiche la carte seule, bord à bord, avec l’année et une petite légende ; `?year=`, `?tilt=` (0-100), `?turn=` (0-360), `?zoom=`, `?speed=` et `?lang=` préréglent la vue. `node scripts/record-video.mjs http://localhost:5173/?lang=fr out/ [inclinaison=0.45] [rotation=0] [vitesse=1.5] [zoom=1.14]` pilote un Chrome sans fenêtre en 2160 × 2160, joue toute la relecture (environ 27 s à 1,5×) et écrit les images ; puis `ffmpeg -f concat -safe 0 -i out/frames.txt -vf "scale=1080:1080:flags=lanczos,format=yuv420p" -r 60 -c:v libx264 -crf 16 out.mp4`. `node scripts/shot.mjs <url> out.png [année] [inclinaison] [rotation]` prend une capture.
+`?record` affiche la carte seule, bord à bord, avec l’année et une petite légende ; `?year=`, `?tilt=` (0-100), `?turn=` (0-360), `?zoom=` avec `?cx=` et `?cy=` (km hors centre), `?speed=` et `?lang=` préréglent la vue. `node scripts/record-video.mjs http://localhost:5173/?lang=fr out/ [inclinaison=0.45] [rotation=0] [vitesse=1.5] [zoom=1.22] [cx=28] [cy=12]` pilote un Chrome sans fenêtre en 2160 × 2160, joue toute la relecture (environ 27 s à 1,5×) et écrit les images ; puis `ffmpeg -f concat -safe 0 -i out/frames.txt -vf "scale=1080:1080:flags=lanczos,format=yuv420p" -r 60 -c:v libx264 -crf 16 out.mp4`. `node scripts/shot.mjs <url> out.png [année] [inclinaison] [rotation]` prend une capture.
 
 ## Automatisation
 

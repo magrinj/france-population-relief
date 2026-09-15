@@ -74,7 +74,7 @@ WebGL2 through three.js. The commune grid and the current values go to the GPU a
 
 ## Recording a video
 
-`?record` shows the map alone, edge to edge, with the year and a small legend; `?year=`, `?tilt=` (0-100), `?turn=` (0-360), `?zoom=`, `?speed=` and `?lang=` preset the view. `node scripts/record-video.mjs http://localhost:5173/?lang=fr out/ [tilt=0.45] [turn=0] [speed=1.5] [zoom=1.14]` drives a headless Chrome at 2160 × 2160, plays the whole replay (about 27 s at 1.5×) and writes the frames; then `ffmpeg -f concat -safe 0 -i out/frames.txt -vf "scale=1080:1080:flags=lanczos,format=yuv420p" -r 60 -c:v libx264 -crf 16 out.mp4`. `node scripts/shot.mjs <url> out.png [year] [tilt] [turn]` takes one screenshot.
+`?record` shows the map alone, edge to edge, with the year and a small legend; `?year=`, `?tilt=` (0-100), `?turn=` (0-360), `?zoom=` with `?cx=` and `?cy=` (km off centre), `?speed=` and `?lang=` preset the view. `node scripts/record-video.mjs http://localhost:5173/?lang=fr out/ [tilt=0.45] [turn=0] [speed=1.5] [zoom=1.22] [cx=28] [cy=12]` drives a headless Chrome at 2160 × 2160, plays the whole replay (about 27 s at 1.5×) and writes the frames; then `ffmpeg -f concat -safe 0 -i out/frames.txt -vf "scale=1080:1080:flags=lanczos,format=yuv420p" -r 60 -c:v libx264 -crf 16 out.mp4`. `node scripts/shot.mjs <url> out.png [year] [tilt] [turn]` takes one screenshot.
 
 ## Automation
 

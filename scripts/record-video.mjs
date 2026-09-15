@@ -1,19 +1,19 @@
 // Records the replay as frames for a video, through headless Chrome:
-//   node scripts/record-video.mjs <url> <folder> [tilt 0-1] [turn 0-1] [speed] [zoom]
+//   node scripts/record-video.mjs <url> <folder> [tilt 0-1] [turn 0-1] [speed] [zoom] [cx km] [cy km]
 // then, in the folder:
 //   ffmpeg -f concat -safe 0 -i frames.txt -vf "scale=1080:1080:flags=lanczos,format=yuv420p" -r 60 -c:v libx264 -crf 16 out.mp4
 import fs from "node:fs";
 import path from "node:path";
 import { launch } from "./lib/chrome.mjs";
 
-const [url, outdir, tilt = "0.45", turn = "0", speed = "1.5", zoom = "1.14"] = process.argv.slice(2);
+const [url, outdir, tilt = "0.45", turn = "0", speed = "1.5", zoom = "1.22", cx = "28", cy = "12"] = process.argv.slice(2);
 fs.rmSync(outdir, { recursive: true, force: true });
 fs.mkdirSync(outdir, { recursive: true });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 // Rendered at 2160 × 2160 and downscaled by ffmpeg: crisp names and contour lines.
 const c = await launch({ width: 1080, height: 1080, extra: ["--force-device-scale-factor=2"] });
 const sep = url.includes("?") ? "&" : "?";
-await c.goto(`${url}${sep}record&tilt=${+tilt * 100}&turn=${+turn * 360}&speed=${speed}&zoom=${zoom}`);
+await c.goto(`${url}${sep}record&tilt=${+tilt * 100}&turn=${+turn * 360}&speed=${speed}&zoom=${zoom}&cx=${cx}&cy=${cy}`);
 await sleep(500);
 const frames = [];
 c.on(async (m) => {
