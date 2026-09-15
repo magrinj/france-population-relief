@@ -66,7 +66,7 @@ Interpretation:
 - **Density** is the count divided by today's area of the commune, so a merged commune is compared with itself over time.
 - The scale is **logarithmic and fixed**: 8 to 16,000 people per km² over 25 bands. Land starts at the sixth band, about 40 per km²; the reds start above 4,000, so the big cities reach them, and the two highest bands (rock and snow) above 9,000, which only Paris and its core reach. The same colour means the same density in any year.
 - Between two censuses the count follows a **monotone cubic in log space** (Fritsch-Carlson): every census is kept exactly, nothing overshoots, and the speed of growth does not jump at each census. A commune with no count at a census keeps the nearest one, so the national total at 1793 (29.4 M) is slightly above the 28.2 M actually counted.
-- The relief is the density field blurred at two scales (16 km and 36 km) **before** taking the logarithm, so people are conserved: a city spreads its inhabitants over the surrounding kilometres and becomes a broad mountain whose volume is its population, as on the German original. Lit from the north-west, with a contour line on every band edge.
+- The relief is the density field blurred at two scales (12 km and 36 km) **before** taking the logarithm, so people are conserved: a city spreads its inhabitants over the surrounding kilometres and becomes a broad mountain whose volume is its population, as on the German original. Lit from the north-west, with a contour line on every band edge.
 
 ## Rendering
 
@@ -74,7 +74,7 @@ WebGL2 through three.js. The commune grid and the current values go to the GPU a
 
 ## Recording a video
 
-`?record` shows the map alone, edge to edge, with the year and a small legend; `?year=`, `?tilt=` (0-100), `?turn=` (0-360), `?zoom=`, `?speed=` and `?lang=` preset the view. `node scripts/record-video.mjs http://localhost:5173/?lang=fr out/ [tilt=0.5] [turn=0] [speed=1] [zoom=1.1]` drives a headless Chrome at 2160 × 2160, plays the whole replay (about 40 s at 1×) and writes the frames; then `ffmpeg -f concat -safe 0 -i out/frames.txt -vf "scale=1080:1080:flags=lanczos,format=yuv420p" -r 60 -c:v libx264 -crf 16 out.mp4`. `node scripts/shot.mjs <url> out.png [year] [tilt] [turn]` takes one screenshot.
+`?record` shows the map alone, edge to edge, with the year and a small legend; `?year=`, `?tilt=` (0-100), `?turn=` (0-360), `?zoom=`, `?speed=` and `?lang=` preset the view. `node scripts/record-video.mjs http://localhost:5173/?lang=fr out/ [tilt=0.5] [turn=0] [speed=1.5] [zoom=1.06]` drives a headless Chrome at 2160 × 2160, plays the whole replay (about 27 s at 1.5×) and writes the frames; then `ffmpeg -f concat -safe 0 -i out/frames.txt -vf "scale=1080:1080:flags=lanczos,format=yuv420p" -r 60 -c:v libx264 -crf 16 out.mp4`. `node scripts/shot.mjs <url> out.png [year] [tilt] [turn]` takes one screenshot.
 
 ## Automation
 

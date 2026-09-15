@@ -38,7 +38,7 @@ async function start() {
     return Number.isFinite(v) && q.get(k) !== null ? Math.min(hi, Math.max(lo, v)) : d;
   };
   let year = num("year", Y0, Y0, Y1),
-    speed = [1, 2, 4].includes(num("speed", 1, 1, 4)) ? num("speed", 1, 1, 4) : 1,
+    speed = num("speed", 1, 0.25, 8),
     playing = false,
     names = true,
     total = 0,

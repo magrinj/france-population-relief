@@ -66,7 +66,7 @@ Interprétation :
 - La **densité** est le chiffre divisé par la superficie actuelle de la commune : une commune fusionnée est comparée à elle-même dans le temps.
 - L’échelle est **logarithmique et fixe** : de 8 à 16 000 habitants au km² sur 25 bandes. La terre commence à la sixième bande, environ 40 au km² ; les rouges commencent au-dessus de 4 000, que les grandes villes atteignent, et les deux bandes les plus hautes (roche et neige) au-dessus de 9 000, que seuls Paris et son cœur atteignent. Une même couleur veut dire une même densité quelle que soit l’année.
 - Entre deux recensements, le chiffre suit une **cubique monotone en échelle logarithmique** (Fritsch-Carlson) : chaque recensement est conservé exactement, rien ne dépasse, et la vitesse de croissance ne saute pas à chaque recensement. Une commune sans chiffre à un recensement garde le plus proche, d’où un total national en 1793 (29,4 M) un peu au-dessus des 28,2 M réellement comptés.
-- Le relief est le champ de densité lissé à deux échelles (16 km et 36 km) **avant** le passage au logarithme, si bien que les habitants sont conservés : une ville étale ses habitants sur les kilomètres alentour et devient une large montagne dont le volume est sa population, comme sur l’original allemand. Éclairé du nord-ouest, avec une courbe de niveau à chaque limite de bande.
+- Le relief est le champ de densité lissé à deux échelles (12 km et 36 km) **avant** le passage au logarithme, si bien que les habitants sont conservés : une ville étale ses habitants sur les kilomètres alentour et devient une large montagne dont le volume est sa population, comme sur l’original allemand. Éclairé du nord-ouest, avec une courbe de niveau à chaque limite de bande.
 
 ## Rendu
 
@@ -74,7 +74,7 @@ WebGL2 via three.js. La grille des communes et les valeurs de l’instant vont s
 
 ## Enregistrer une vidéo
 
-`?record` affiche la carte seule, bord à bord, avec l’année et une petite légende ; `?year=`, `?tilt=` (0-100), `?turn=` (0-360), `?zoom=`, `?speed=` et `?lang=` préréglent la vue. `node scripts/record-video.mjs http://localhost:5173/?lang=fr out/ [inclinaison=0.5] [rotation=0] [vitesse=1] [zoom=1.1]` pilote un Chrome sans fenêtre en 2160 × 2160, joue toute la relecture (environ 40 s à 1×) et écrit les images ; puis `ffmpeg -f concat -safe 0 -i out/frames.txt -vf "scale=1080:1080:flags=lanczos,format=yuv420p" -r 60 -c:v libx264 -crf 16 out.mp4`. `node scripts/shot.mjs <url> out.png [année] [inclinaison] [rotation]` prend une capture.
+`?record` affiche la carte seule, bord à bord, avec l’année et une petite légende ; `?year=`, `?tilt=` (0-100), `?turn=` (0-360), `?zoom=`, `?speed=` et `?lang=` préréglent la vue. `node scripts/record-video.mjs http://localhost:5173/?lang=fr out/ [inclinaison=0.5] [rotation=0] [vitesse=1.5] [zoom=1.06]` pilote un Chrome sans fenêtre en 2160 × 2160, joue toute la relecture (environ 27 s à 1,5×) et écrit les images ; puis `ffmpeg -f concat -safe 0 -i out/frames.txt -vf "scale=1080:1080:flags=lanczos,format=yuv420p" -r 60 -c:v libx264 -crf 16 out.mp4`. `node scripts/shot.mjs <url> out.png [année] [inclinaison] [rotation]` prend une capture.
 
 ## Automatisation
 

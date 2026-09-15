@@ -11,7 +11,7 @@ import * as THREE from "three";
 import { HYPSO, LO, HI, NBAND, WATER } from "./scale.ts";
 import type { Data } from "./data.ts";
 
-const FINE_R = 8; // cells: two passes give a 16 km kernel; a city spreads its people that far
+const FINE_R = 6; // cells: two passes give a 12 km kernel; a city spreads its people that far
 const COARSE_R = 9; // cells at quarter resolution, so ≈ 36 km
 const TILT_MAX = (62 * Math.PI) / 180;
 const Z_SCALE = 0.16; // full-scale value rises this fraction of the map height

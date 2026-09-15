@@ -91,12 +91,10 @@ input[type="range"] { accent-color: var(--accent); }
 .loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: 15px; background: #050810; }
 
 /* ?record: the map alone, edge to edge, with the year on top and a small legend. */
-main.record .view, main.record .player, main.record .sources, main.record .feed, main.record header .span, main.record header .lang, main.record .legend .small { display: none; }
-main.record header h1 { font-size: 40px; }
-main.record header .sub { font-size: 17px; }
-main.record .sign b { font-size: 92px; }
-main.record .sign span { font-size: 17px; }
-main.record .sign .growth { font-size: 15px; }
+main.record .view, main.record .player, main.record .sources, main.record .feed, main.record header, main.record .legend .small { display: none; }
+main.record .sign b { font-size: 76px; }
+main.record .sign span { font-size: 16px; }
+main.record .sign .growth { font-size: 14px; }
 main.record .legend { width: 260px; }
 main.record footer { pointer-events: none; }
 
