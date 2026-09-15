@@ -6,7 +6,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { launch } from "./lib/chrome.mjs";
 
-const [url, outdir, tilt = "0.5", turn = "0", speed = "1.5", zoom = "1.06"] = process.argv.slice(2);
+const [url, outdir, tilt = "0.45", turn = "0", speed = "1.5", zoom = "1.14"] = process.argv.slice(2);
 fs.rmSync(outdir, { recursive: true, force: true });
 fs.mkdirSync(outdir, { recursive: true });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
