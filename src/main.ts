@@ -170,6 +170,7 @@ async function start() {
     tipKey = "";
   view();
   setYear(year);
+  if (q.has("zoom")) zoomTo(num("zoom", 1, 1, 12), data.W / 2, data.H / 2, true);
   $el("#loading").remove();
   const frameMs: number[] = [];
   const loop = (now: number) => {
