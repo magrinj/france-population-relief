@@ -8,10 +8,10 @@
 //    └─ combine: normalised convolution (so coasts are not eroded), sea depth
 //        from the softened land mask, one texture read by the terrain mesh.
 import * as THREE from "three";
-import { HYPSO, NBAND, WATER } from "./scale.ts";
+import { HYPSO, LO, HI, NBAND, WATER } from "./scale.ts";
 import type { Data } from "./data.ts";
 
-const FINE_R = 5; // cells: two passes give a 10 km kernel, a commune is about 4 km wide
+const FINE_R = 8; // cells: two passes give a 16 km kernel; a city spreads its people that far
 const COARSE_R = 9; // cells at quarter resolution, so ≈ 36 km
 const TILT_MAX = (62 * Math.PI) / 180;
 const Z_SCALE = 0.16; // full-scale value rises this fraction of the map height
@@ -35,12 +35,15 @@ void main(){
   gl_FragColor = s / ${(2 * r + 1).toFixed(1)};
 }`;
 const combineFrag = `
-uniform sampler2D fine; uniform sampler2D coarse; uniform sampler2D raw; varying vec2 vUv;
+uniform sampler2D fine; uniform sampler2D coarse; uniform sampler2D raw; uniform float logLo; uniform float invSpan; varying vec2 vUv;
 void main(){
   vec4 f = texture2D(fine, vUv), c = texture2D(coarse, vUv);
   float land = texture2D(raw, vUv).g;
-  float hf = f.r / max(f.g, 1e-4), hc = c.r / max(c.g, 1e-4);
-  float h = mix(hc, hf, 0.85) + 0.13 * (hf - hc);
+  // Densities were blurred linearly, so the people are conserved and a
+  // city becomes a broad mountain; only now the logarithmic ladder.
+  float df = f.r / max(f.g, 1e-4), dc = c.r / max(c.g, 1e-4);
+  float d = max(mix(dc, df, 0.85) + 0.13 * (df - dc), 0.0);
+  float h = clamp((log(d + 1e-3) - logLo) * invSpan, 0.0, 1.0);
   // At sea the depth follows the softened coast: shallow next to land.
   float sea = ${WATER.toFixed(4)} * 0.85 * smoothstep(0.0, 1.0, c.g);
   // The coast is a few km of slope, not a vertical wall.
@@ -192,7 +195,7 @@ export class Relief {
       raw: sm(rawFrag, { idx: { value: idx }, vals: { value: this.vals }, valsSize: { value: new THREE.Vector2(VW, VH) } }),
       fine: sm(blurFrag(FINE_R), { src: { value: null }, dir: { value: new THREE.Vector2() } }),
       coarse: sm(blurFrag(COARSE_R), { src: { value: null }, dir: { value: new THREE.Vector2() } }),
-      combine: sm(combineFrag, { fine: { value: this.rt.b.texture }, coarse: { value: this.rt.cb.texture }, raw: { value: this.rt.raw.texture } }),
+      combine: sm(combineFrag, { fine: { value: this.rt.b.texture }, coarse: { value: this.rt.cb.texture }, raw: { value: this.rt.raw.texture }, logLo: { value: Math.log(LO) }, invSpan: { value: 1 / Math.log(HI / LO) } }),
       copy: sm(copyFrag, { src: { value: this.rt.height.texture } }),
     };
     this.quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), this.mats.raw);
@@ -222,6 +225,7 @@ export class Relief {
     this.resize();
   }
 
+  // One density (people per km²) per commune.
   setValues(v: Float32Array) {
     (this.vals.image.data as Float32Array).set(v);
     this.vals.needsUpdate = true;

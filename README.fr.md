@@ -66,11 +66,11 @@ Interprétation :
 - La **densité** est le chiffre divisé par la superficie actuelle de la commune : une commune fusionnée est comparée à elle-même dans le temps.
 - L’échelle est **logarithmique et fixe** : de 8 à 16 000 habitants au km² sur 25 bandes. La terre commence à la sixième bande, environ 40 au km² ; les rouges commencent au-dessus de 4 000, que les grandes villes atteignent, et les deux bandes les plus hautes (roche et neige) au-dessus de 9 000, que seuls Paris et son cœur atteignent. Une même couleur veut dire une même densité quelle que soit l’année.
 - Entre deux recensements, le chiffre suit une **cubique monotone en échelle logarithmique** (Fritsch-Carlson) : chaque recensement est conservé exactement, rien ne dépasse, et la vitesse de croissance ne saute pas à chaque recensement. Une commune sans chiffre à un recensement garde le plus proche, d’où un total national en 1793 (29,4 M) un peu au-dessus des 28,2 M réellement comptés.
-- Le relief est le champ de densité lissé à deux échelles (5 km et 36 km), éclairé du nord-ouest, avec une courbe de niveau à chaque limite de bande. Le lissage abaisse un peu les sommets : le champ à Paris vaut environ 0,95 fois sa propre valeur.
+- Le relief est le champ de densité lissé à deux échelles (16 km et 36 km) **avant** le passage au logarithme, si bien que les habitants sont conservés : une ville étale ses habitants sur les kilomètres alentour et devient une large montagne dont le volume est sa population, comme sur l’original allemand. Éclairé du nord-ouest, avec une courbe de niveau à chaque limite de bande.
 
 ## Rendu
 
-WebGL2 via three.js. La grille des communes et les valeurs de l’instant vont sur le GPU sous forme de textures ; à chaque image où l’année change, une passe brute, deux flous séparables et une passe de combinaison reconstruisent le champ de hauteurs (1224 × 1145, demi-flottant), et un plan de 350 000 sommets s’y déplace. Couleur, éclairage, courbes de niveau et département survolé sont calculés dans le fragment shader. Une copie au quart de résolution du champ revient sur le CPU de façon asynchrone : les noms des villes s’y posent et le survol y lance un rayon, si bien que rien n’attend jamais le GPU. Les 35 000 séries sont échantillonnées dans des tableaux typés plats en 3 ms environ ; la page ne se redessine que quand quelque chose a changé. 60 images par seconde à 4× sur un portable de 2021, aucune image au-dessus de 16 ms.
+WebGL2 via three.js. La grille des communes et les valeurs de l’instant vont sur le GPU sous forme de textures ; à chaque image où l’année change, une passe brute, deux flous séparables de la densité linéaire et une passe de combinaison reconstruisent le champ de hauteurs (1224 × 1145, demi-flottant), et un plan de 350 000 sommets s’y déplace. Couleur, éclairage, courbes de niveau et département survolé sont calculés dans le fragment shader. Une copie au quart de résolution du champ revient sur le CPU de façon asynchrone : les noms des villes s’y posent et le survol y lance un rayon, si bien que rien n’attend jamais le GPU. Les 35 000 séries sont échantillonnées dans des tableaux typés plats en 3 ms environ ; la page ne se redessine que quand quelque chose a changé. 60 images par seconde à 4× sur un portable de 2021, aucune image au-dessus de 16 ms.
 
 ## Enregistrer une vidéo
 
@@ -93,7 +93,7 @@ WebGL2 via three.js. La grille des communes et les valeurs de l’instant vont s
 - France métropolitaine seulement ; les départements d’outre-mer ne sont pas sur la carte.
 - Les chiffres de 1793 et 1800 sont grossiers par nature ; quelques milliers de communes n’ont pas de chiffre à certains recensements anciens et gardent le plus proche.
 - La densité utilise les contours actuels ; la population ancienne d’une commune est répartie sur toute sa superficie d’aujourd’hui.
-- Le lissage échange un peu de hauteur contre de la lisibilité : une commune très petite et très dense est plus basse sur la carte que sa seule densité ne le voudrait.
+- Le lissage étale une commune sur ses voisines : une commune très petite et très dense apparaît plus basse et plus large que sa propre densité, et la campagne au bord d’une ville un peu plus haute.
 
 ## Soutien
 

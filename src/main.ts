@@ -28,6 +28,7 @@ async function start() {
   const relief = new Relief(map, data);
   marks(data.years);
   const heights = new Float32Array(data.communes.length),
+    dens = new Float32Array(data.communes.length),
     pops = new Float32Array(data.communes.length),
     depPops = new Float64Array(data.deps.length);
 
@@ -58,8 +59,8 @@ async function start() {
 
   const setYear = (y: number) => {
     year = Math.min(Y1, Math.max(Y0, y));
-    total = sampleYear(data, year, heights, pops, depPops);
-    relief.setValues(heights);
+    total = sampleYear(data, year, heights, pops, depPops, dens);
+    relief.setValues(dens);
     time.value = String(year);
     sign(t, lang, year, total, data.total1793);
     feed(t, year);

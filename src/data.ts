@@ -102,9 +102,9 @@ function flatten(years: number[], pop: Int32Array, communes: Commune[]): Knots {
   return { start, count, x: x.subarray(0, k), y: y.subarray(0, k), m: m.subarray(0, k), seg: new Int32Array(n), base };
 }
 
-// Populations and heights of every commune at a fractional year, plus the
-// population of every département. Returns the national total.
-export function sampleYear(d: Data, t: number, heights: Float32Array, pops: Float32Array, depPops: Float64Array): number {
+// Populations, densities and ladder heights of every commune at a fractional
+// year, plus the population of every département. Returns the national total.
+export function sampleYear(d: Data, t: number, heights: Float32Array, pops: Float32Array, depPops: Float64Array, dens?: Float32Array): number {
   let total = 0;
   depPops.fill(0);
   const { start, count, x, y, m, seg, base } = d.knots;
@@ -136,6 +136,7 @@ export function sampleYear(d: Data, t: number, heights: Float32Array, pops: Floa
     pops[i] = p;
     const hv = lp * invSpan - base[i];
     heights[i] = hv < 0 ? 0 : hv > 1 ? 1 : hv;
+    if (dens) dens[i] = p > 0 ? p / d.communes[i].area : 0;
     if (p > 0) {
       total += p;
       depPops[d.depOf[i]] += p;

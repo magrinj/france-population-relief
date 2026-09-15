@@ -66,11 +66,11 @@ Interpretation:
 - **Density** is the count divided by today's area of the commune, so a merged commune is compared with itself over time.
 - The scale is **logarithmic and fixed**: 8 to 16,000 people per km² over 25 bands. Land starts at the sixth band, about 40 per km²; the reds start above 4,000, so the big cities reach them, and the two highest bands (rock and snow) above 9,000, which only Paris and its core reach. The same colour means the same density in any year.
 - Between two censuses the count follows a **monotone cubic in log space** (Fritsch-Carlson): every census is kept exactly, nothing overshoots, and the speed of growth does not jump at each census. A commune with no count at a census keeps the nearest one, so the national total at 1793 (29.4 M) is slightly above the 28.2 M actually counted.
-- The relief is the density field blurred at two scales (5 km and 36 km), lit from the north-west, with a contour line on every band edge. Blurring lowers a peak a little: the field at Paris reads about 0.95 of its own value.
+- The relief is the density field blurred at two scales (16 km and 36 km) **before** taking the logarithm, so people are conserved: a city spreads its inhabitants over the surrounding kilometres and becomes a broad mountain whose volume is its population, as on the German original. Lit from the north-west, with a contour line on every band edge.
 
 ## Rendering
 
-WebGL2 through three.js. The commune grid and the current values go to the GPU as textures; each frame that the year changes, a raw pass, two separable box blurs and a combine pass rebuild the height field (1224 × 1145, half float), and a 350,000-vertex plane displaces itself from it. Colour, lighting, contour lines and the hovered département are computed in the fragment shader. A quarter-resolution copy of the field comes back to the CPU asynchronously; city names stand on it, and hovering ray-marches through it, so nothing ever waits for the GPU. The 35,000 series are sampled from flat typed arrays in about 3 ms; the page only redraws when something changed. 60 frames per second at 4× on a 2021 laptop, no frame over 16 ms.
+WebGL2 through three.js. The commune grid and the current values go to the GPU as textures; each frame that the year changes, a raw pass, two separable box blurs of the linear density and a combine pass rebuild the height field (1224 × 1145, half float), and a 350,000-vertex plane displaces itself from it. Colour, lighting, contour lines and the hovered département are computed in the fragment shader. A quarter-resolution copy of the field comes back to the CPU asynchronously; city names stand on it, and hovering ray-marches through it, so nothing ever waits for the GPU. The 35,000 series are sampled from flat typed arrays in about 3 ms; the page only redraws when something changed. 60 frames per second at 4× on a 2021 laptop, no frame over 16 ms.
 
 ## Recording a video
 
@@ -93,7 +93,7 @@ WebGL2 through three.js. The commune grid and the current values go to the GPU a
 - Metropolitan France only; the overseas départements are not on the map.
 - 1793 and 1800 counts are rough by nature; a few thousand communes have no figure at some early census and keep the nearest one.
 - Density uses today's commune outlines; a commune's early population is spread over its whole present area.
-- The blur trades a little peak height for readability: a very small, very dense commune is lower on the map than its density alone would put it.
+- The blur spreads a commune over its neighbours: a very small, very dense commune reads lower and wider on the map than its own density, and the countryside next to a city reads a little higher.
 
 ## Support
 
